@@ -1,0 +1,82 @@
+import os
+import csv
+from collections import Counter
+import operator
+
+# csvpath  = "Resources\budget_data.csv"
+csvpath = os.path.join("Resources", "election_data.csv")
+
+with open(csvpath) as csv_file:
+    data = csv.reader(csv_file)
+    
+    next(data)
+    voter_list = []
+    county_list = []
+    candidate_list = []
+
+    total_count = 0
+     
+
+    for row in data:
+        total_count = total_count +1
+        voter_list.append(row[0])
+        county_list.append(row[1])
+        candidate_list.append(row[2])
+    
+    print('Election Results')
+    print('------------------------------')
+    print(f'Total Voters =  {total_count}')
+    print('------------------------------')
+
+    
+    my_dict = dict(Counter(candidate_list))
+    #print(my_dict)
+    #print(my_dict.keys())
+    #print(my_dict.values())
+    #print(my_dict.items())
+
+    for name in my_dict:
+        percent = (my_dict[name]/total_count)*100
+        print(f'{name} : {my_dict[name]}    ({percent}%)')
+    print('------------------------------')
+
+    for name in my_dict:
+        max_value = max(my_dict.values())
+        max_keys = [k for k, v in my_dict.items() if v == max_value]
+        winner = max_keys
+    print(f' Winner : {winner}')
+      
+
+
+
+
+
+roster = zip(voter_list, county_list, candidate_list)
+
+output_file = os.path.join("Output", "newcsv.csv")
+
+with open(output_file,"w") as csvfile:
+
+    csv_writer = csv.writer(csvfile)
+    
+    csv_writer.writerow(['Voters ID', 'County', 'Candidate']) 
+
+    csv_writer.writerows(roster)
+  
+csv_file.close()
+
+
+
+    #d = {}
+    #for word in candidate_list:
+        #d[word] = d.get(word, 0) + 1
+        #candidate_percent = my_dict[name]/total_count
+
+    #word_freq = []
+    #for key, value in d.items():
+        #word_freq.append((value, key))
+    #word_freq
+    
+    #print(key,value)
+   
+
